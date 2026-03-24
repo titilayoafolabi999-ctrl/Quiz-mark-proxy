@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Mark Bible Tutor — GiftAxis Academy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --surface: #161a23;
+      --surface2: #1e2330;
+      --border: rgba(255,255,255,0.08);
+      --accent: #c9a84c;
+      --accent2: #e8c97a;
+      --text: #e8eaf0;
+      --text-muted: #7a8099;
+      --success: #4caf82;
+      --danger: #e05c5c;
+      --radius: 14px;
+      --shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 0 0 80px;
+      overflow-x: hidden;
+    }
+
+    /* === HEADER === */
+    .app-header {
+      background: linear-gradient(135deg, #0d0f14 0%, #1a1228 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 20px 14px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .app-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .app-logo .icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    .app-logo h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 17px;
+      color: var(--text);
+      line-height: 1.2;
+    }
+    .app-logo span {
+      display: block;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      color: var(--accent);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .user-badge {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 6px 14px 6px 8px;
+      font-size: 13px;
+    }
+    .user-badge .avatar {
+      width: 26px;
+      height: 26px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: #0d0f14;
+    }
+    .user-badge .name { font-weight: 600; color: var(--text); }
+    .user-badge .pts { color: var(--accent); font-size: 12px; }
+    #logoutBtn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 16px;
+      padding: 0 0 0 6px;
+      line-height: 1;
+      transition: color 0.2s;
+    }
+    #logoutBtn:hover { color: var(--danger); }
+
+    /* === MAIN CONTENT === */
+    .page { max-width: 640px; margin: 0 auto; padding: 24px 16px; }
+
+    /* === AUTH CARD === */
+    .auth-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px 24px;
+      box-shadow: var(--shadow);
+    }
+    .auth-card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      margin-bottom: 6px;
+    }
+    .auth-card p {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+    .tab-row {
+      display: flex;
+      gap: 0;
+      background: var(--surface2);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 22px;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      background: none;
+      color: var(--text-muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn.active {
+      background: var(--accent);
+      color: #0d0f14;
+    }
+    .form-group { margin-bottom: 14px; }
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    .form-group input {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 13px 14px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus { border-color: var(--accent); }
+    .form-group input::placeholder { color: var(--text-muted); }
+    .btn-primary {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #0d0f14;
+      border: none;
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+      margin-top: 4px;
+    }
+    .btn-primary:active { opacity: 0.85; transform: scale(0.98); }
+    .auth-msg {
+      margin-top: 12px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      display: none;
+    }
+    .auth-msg.error { background: rgba(224,92,92,0.12); color: var(--danger); border: 1px solid rgba(224,92,92,0.2); display: block; }
+    .auth-msg.success { background: rgba(76,175,130,0.12); color: var(--success); border: 1px solid rgba(76,175,130,0.2); display: block; }
+
+    /* === STUDY PANEL === */
+    #studyPanel { display: none; }
+
+    /* Progress Summary */
+    .progress-banner {
+      background: linear-gradient(135deg, #1a1228, #1e1830);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 16px;
+      padding: 18px 20px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .progress-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .progress-info h3 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .progress-info p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .progress-bar-wrap {
+      background: var(--surface2);
+      border-radius: 50px;
+      height: 6px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 50px;
+      transition: width 0.6s ease;
+    }
+
+    /* Chapter Selector */
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+    .chapter-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .ch-btn {
+      aspect-ratio: 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text-muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .ch-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .ch-btn.selected { background: var(--accent); color: #0d0f14; border-color: var(--accent); }
+    .ch-btn.completed::after {
+      content: '✓';
+      position: absolute;
+      top: 2px;
+      right: 4px;
+      font-size: 10px;
+      color: var(--success);
+    }
+    .ch-btn.completed { border-color: rgba(76,175,130,0.3); }
+
+    .action-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .btn-secondary {
+      flex: 1;
+      padding: 13px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-load {
+      flex: 2;
+      padding: 13px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none;
+      border-radius: 12px;
+      color: #0d0f14;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .btn-load:active { opacity: 0.85; transform: scale(0.98); }
+    .btn-load:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* Loading State */
+    #loadingState {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid var(--surface2);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 14px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #loadingState p { color: var(--text-muted); font-size: 14px; }
+
+    /* Scripture Card */
+    .scripture-card {
+      display: none;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    .scripture-header {
+      background: var(--surface2);
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+    .scripture-header h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      color: var(--accent2);
+    }
+    .scripture-header span { font-size: 12px; color: var(--text-muted); }
+    .scripture-body {
+      padding: 18px;
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--text);
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    .scripture-body::-webkit-scrollbar { width: 4px; }
+    .scripture-body::-webkit-scrollbar-track { background: transparent; }
+    .scripture-body::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 2px; }
+
+    /* Quiz Card */
+    .quiz-card {
+      display: none;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    .quiz-header {
+      background: linear-gradient(135deg, #1a1228, #1e1830);
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .quiz-header .quiz-icon {
+      width: 32px;
+      height: 32px;
+      background: rgba(201,168,76,0.15);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+    .quiz-header h3 {
+      font-size: 15px;
+      font-weight: 600;
+    }
+    .quiz-body { padding: 18px; }
+    .quiz-question-text {
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.6;
+      margin-bottom: 18px;
+      color: var(--text);
+    }
+    .options-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .option-item { }
+    .option-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 13px 14px;
+      background: var(--surface2);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .option-label:hover { border-color: var(--accent); }
+    .option-item input[type=radio] { display: none; }
+    .option-item input[type=radio]:checked + .option-label {
+      border-color: var(--accent);
+      background: rgba(201,168,76,0.08);
+    }
+    .option-badge {
+      min-width: 26px;
+      height: 26px;
+      border-radius: 7px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+    .option-item input[type=radio]:checked + .option-label .option-badge {
+      background: var(--accent);
+      color: #0d0f14;
+      border-color: var(--accent);
+    }
+    .option-text { font-size: 14px; line-height: 1.5; padding-top: 2px; }
+    .quiz-body .btn-primary { margin-top: 18px; }
+    .quiz-feedback {
+      display: none;
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+    .quiz-feedback.correct { background: rgba(76,175,130,0.12); border: 1px solid rgba(76,175,130,0.25); color: var(--success); }
+    .quiz-feedback.incorrect { background: rgba(224,92,92,0.12); border: 1px solid rgba(224,92,92,0.25); color: var(--danger); }
+
+    /* Complete Button */
+    #markCompBtn {
+      width: 100%;
+      max-width: 640px;
+      margin: 0 auto 0;
+      display: none;
+      padding: 15px;
+      background: rgba(76,175,130,0.1);
+      border: 1.5px solid rgba(76,175,130,0.3);
+      border-radius: 14px;
+      color: var(--success);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    #markCompBtn:hover { background: rgba(76,175,130,0.18); }
+
+    /* === AI ASSISTANT BUTTON === */
+    #aiBtn {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      width: 54px;
+      height: 54px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(201,168,76,0.4);
+      touch-action: none;
+      user-select: none;
+      z-index: 200;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    #aiBtn:hover { transform: scale(1.05); box-shadow: 0 12px 30px rgba(201,168,76,0.5); }
+
+    /* AI Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 300;
+      align-items: flex-end;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-sheet {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px 24px 0 0;
+      padding: 24px 20px 36px;
+      width: 100%;
+      max-width: 640px;
+      animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .modal-handle {
+      width: 40px;
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      margin: 0 auto 20px;
+    }
+    .modal-sheet h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+    .modal-sheet p { font-size: 13px; color: var(--text-muted); margin-bottom: 18px; }
+    .ai-input-row { display: flex; gap: 10px; }
+    .ai-input-row input {
+      flex: 1;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 13px 14px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .ai-input-row input:focus { border-color: var(--accent); }
+    .ai-input-row button {
+      padding: 13px 20px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none;
+      border-radius: 12px;
+      color: #0d0f14;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .ai-response {
+      display: none;
+      margin-top: 16px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text);
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .ai-loading {
+      display: none;
+      text-align: center;
+      padding: 20px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+    .ai-spinner {
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--surface2);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 8px;
+    }
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 22px;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    /* === FOOTER === */
+    .app-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 10px 20px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      z-index: 100;
+    }
+    .app-footer span { color: var(--accent); }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 10px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      z-index: 999;
+      opacity: 0;
+      transition: all 0.3s;
+      white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.success { border-color: rgba(76,175,130,0.4); color: var(--success); }
+    .toast.error { border-color: rgba(224,92,92,0.4); color: var(--danger); }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="app-logo">
+        <div class="icon">📖</div>
+        <h1>Mark Bible Tutor<span>GiftAxis Academy</span></h1>
+      </div>
+      <div id="userBadge" class="user-badge">
+        <div class="avatar" id="avatarLetter">G</div>
+        <div>
+          <div class="name" id="currentUser">—</div>
+          <div class="pts"><span id="score">0</span> pts</div>
+        </div>
+        <button id="logoutBtn" title="Sign out">⏻</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="page">
+
+    <!-- Auth Panel -->
+    <div id="authPanel">
+      <div class="auth-card">
+        <h2>Welcome Back 👋</h2>
+        <p>Sign in or create an account to begin studying the Gospel of Mark.</p>
+        <div class="tab-row">
+          <button class="tab-btn active" onclick="setAuthTab('login')">Sign In</button>
+          <button class="tab-btn" onclick="setAuthTab('register')">Register</button>
+        </div>
+        <div class="form-group">
+          <label>Username</label>
+          <input id="username" type="text" placeholder="Enter your username" autocomplete="username" />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input id="password" type="password" placeholder="Enter your password" autocomplete="current-password" />
+        </div>
+        <button class="btn-primary" id="authSubmitBtn" onclick="handleAuth()">Sign In</button>
+        <div id="authMsg" class="auth-msg"></div>
+      </div>
+    </div>
+
+    <!-- Study Panel -->
+    <div id="studyPanel">
+
+      <div class="progress-banner">
+        <div class="progress-icon">📚</div>
+        <div class="progress-info" style="flex:1">
+          <h3>Your Study Progress</h3>
+          <p id="progressText">0 of 16 chapters completed</p>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <p class="section-label">Select a Chapter</p>
+      <div class="chapter-grid" id="chapterGrid"></div>
+
+      <div class="action-row">
+        <button class="btn-secondary" onclick="markCompleted()">✓ Mark Done</button>
+        <button class="btn-load" id="loadBtn" onclick="loadChapter()">Load Chapter →</button>
+      </div>
+
+      <div id="loadingState">
+        <div class="spinner"></div>
+        <p>Retrieving scripture and generating quiz…</p>
+      </div>
+
+      <div class="scripture-card" id="scriptureCard">
+        <div class="scripture-header">
+          <h3 id="scriptureTitle">Mark — Chapter</h3>
+          <span>King James Version</span>
+        </div>
+        <div class="scripture-body" id="scriptureBody"></div>
+      </div>
+
+      <div class="quiz-card" id="quizCard">
+        <div class="quiz-header">
+          <div class="quiz-icon">🎯</div>
+          <h3>Comprehension Quiz</h3>
+        </div>
+        <div class="quiz-body" id="quizBody"></div>
+      </div>
+
+      <button id="markCompBtn" onclick="markCompleted()">✅ Mark Chapter as Completed</button>
+
+    </div>
+  </div>
+
+  <!-- AI Assistant FAB -->
+  <div id="aiBtn" title="Ask the AI Tutor">🤖</div>
+
+  <!-- AI Modal -->
+  <div class="modal-overlay" id="aiModal">
+    <div class="modal-sheet" style="position:relative">
+      <button class="modal-close" onclick="closeAIModal()">×</button>
+      <div class="modal-handle"></div>
+      <h3>AI Scripture Tutor</h3>
+      <p>Ask any question about the Gospel of Mark and receive an informed response.</p>
+      <div class="ai-input-row">
+        <input id="aiInput" type="text" placeholder="e.g. Who healed the blind man?" />
+        <button onclick="askAI()">Ask</button>
+      </div>
+      <div class="ai-loading" id="aiLoading">
+        <div class="ai-spinner"></div>
+        <p>Generating response…</p>
+      </div>
+      <div class="ai-response" id="aiResponse"></div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    Developed by <span>Ebunoluwa</span> · Powered by <span>GiftAxis Academy</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
