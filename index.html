@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="gold">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Mark Bible Tutor — GiftAxis Academy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== THEME VARIABLES ===== */
+    :root,
+    [data-theme="gold"] {
+      --bg: #0d0f14;
+      --surface: #161a23;
+      --surface2: #1e2330;
+      --border: rgba(255,255,255,0.08);
+      --accent: #c9a84c;
+      --accent2: #e8c97a;
+      --text: #e8eaf0;
+      --text-muted: #7a8099;
+      --success: #4caf82;
+      --danger: #e05c5c;
+    }
+    [data-theme="ocean"] {
+      --bg: #050d1a;
+      --surface: #0a1628;
+      --surface2: #0f2040;
+      --border: rgba(100,180,255,0.12);
+      --accent: #4a9eff;
+      --accent2: #80c3ff;
+      --text: #d0e8ff;
+      --text-muted: #5080a0;
+      --success: #4caf82;
+      --danger: #e05c5c;
+    }
+    [data-theme="forest"] {
+      --bg: #060e08;
+      --surface: #0d1a10;
+      --surface2: #142018;
+      --border: rgba(100,200,120,0.12);
+      --accent: #4caf82;
+      --accent2: #80cc9a;
+      --text: #d0f0d8;
+      --text-muted: #508060;
+      --success: #4caf82;
+      --danger: #e05c5c;
+    }
+    [data-theme="sunset"] {
+      --bg: #140a05;
+      --surface: #221008;
+      --surface2: #301810;
+      --border: rgba(255,140,80,0.12);
+      --accent: #f07040;
+      --accent2: #f09060;
+      --text: #ffe8d8;
+      --text-muted: #a06040;
+      --success: #4caf82;
+      --danger: #e05c5c;
+    }
+    [data-theme="royal"] {
+      --bg: #0c0814;
+      --surface: #160e22;
+      --surface2: #1e1432;
+      --border: rgba(160,100,255,0.12);
+      --accent: #a064ff;
+      --accent2: #c090ff;
+      --text: #e8d8ff;
+      --text-muted: #806098;
+      --success: #4caf82;
+      --danger: #e05c5c;
+    }
+    [data-theme="arctic"] {
+      --bg: #f0f4f8;
+      --surface: #ffffff;
+      --surface2: #e8eef4;
+      --border: rgba(0,0,0,0.08);
+      --accent: #2566d8;
+      --accent2: #4a88f0;
+      --text: #1a2030;
+      --text-muted: #6080a0;
+      --success: #2e8a56;
+      --danger: #c03030;
+    }
+
+    /* ===== RESET ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background 0.4s, color 0.4s;
+    }
+
+    /* ===== RAINBOW BANNER (TOP) ===== */
+    .rainbow-banner {
+      background: linear-gradient(270deg,
+        #c9a84c, #e05c5c, #f07040, #4caf82,
+        #4a9eff, #a064ff, #c9a84c);
+      background-size: 600% 600%;
+      animation: rainbowShift 5s ease infinite;
+      padding: 9px 16px;
+      text-align: center;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    @keyframes rainbowShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .banner-spin {
+      display: inline-block;
+      animation: spinIcon 2s linear infinite;
+      font-size: 15px;
+    }
+    @keyframes spinIcon { to { transform: rotate(360deg); } }
+    .banner-text-inner {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    /* ===== HEADER ===== */
+    .app-header {
+      background: linear-gradient(135deg, #0d0f14 0%, #1a1228 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 20px 12px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+    [data-theme="arctic"] .app-header { background: linear-gradient(135deg,#fff 0%,#e8eef4 100%); }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .app-logo { display: flex; align-items: center; gap: 10px; }
+    .app-logo .icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .app-logo h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 17px;
+      color: var(--text);
+      line-height: 1.2;
+    }
+    .app-logo span {
+      display: block;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      color: var(--accent);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .header-right { display: flex; align-items: center; gap: 8px; }
+    .user-badge {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 6px 14px 6px 8px;
+      font-size: 13px;
+    }
+    .user-badge .avatar {
+      width: 26px; height: 26px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; color: #0d0f14;
+    }
+    [data-theme="arctic"] .user-badge .avatar { color: #fff; }
+    .user-badge .name { font-weight: 600; color: var(--text); }
+    .user-badge .pts { color: var(--accent); font-size: 12px; }
+    #logoutBtn {
+      background: none; border: none;
+      color: var(--text-muted); cursor: pointer;
+      font-size: 16px; padding: 0 0 0 6px;
+      line-height: 1; transition: color 0.2s;
+    }
+    #logoutBtn:hover { color: var(--danger); }
+    #themeToggleBtn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-muted);
+      font-size: 16px;
+      width: 32px; height: 32px;
+      display: none;
+      align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    #themeToggleBtn:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ===== PAGE ===== */
+    .page { max-width: 640px; margin: 0 auto; padding: 24px 16px 40px; }
+
+    /* ===== AUTH CARD ===== */
+    .auth-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px 24px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+    .auth-card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px; margin-bottom: 6px;
+    }
+    .auth-card p { color: var(--text-muted); font-size: 14px; margin-bottom: 24px; }
+
+    .tab-row {
+      display: flex;
+      background: var(--surface2);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 22px;
+    }
+    .tab-btn {
+      flex: 1; padding: 10px;
+      border: none; background: none;
+      color: var(--text-muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px; font-weight: 600;
+      border-radius: 8px; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn.active { background: var(--accent); color: #0d0f14; }
+    [data-theme="arctic"] .tab-btn.active { color: #fff; }
+
+    .form-group { margin-bottom: 14px; }
+    .form-group label {
+      display: block; font-size: 12px; font-weight: 600;
+      color: var(--text-muted); text-transform: uppercase;
+      letter-spacing: 0.5px; margin-bottom: 6px;
+    }
+    .form-group input {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 13px 14px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px; outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus { border-color: var(--accent); }
+    .form-group input::placeholder { color: var(--text-muted); }
+
+    .btn-primary {
+      width: 100%; padding: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #0d0f14;
+      border: none; border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px; font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+      margin-top: 4px;
+    }
+    [data-theme="arctic"] .btn-primary { color: #fff; }
+    .btn-primary:active { opacity: 0.85; transform: scale(0.98); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .auth-msg {
+      margin-top: 12px; padding: 10px 14px;
+      border-radius: 8px; font-size: 13px; display: none;
+    }
+    .auth-msg.error { background: rgba(224,92,92,0.12); color: var(--danger); border: 1px solid rgba(224,92,92,0.2); display: block; }
+    .auth-msg.success { background: rgba(76,175,130,0.12); color: var(--success); border: 1px solid rgba(76,175,130,0.2); display: block; }
+
+    /* ===== STUDY PANEL ===== */
+    #studyPanel { display: none; }
+
+    /* Study Tabs */
+    .study-tab-nav {
+      display: flex;
+      gap: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 5px;
+      margin-bottom: 20px;
+      position: sticky;
+      top: 68px;
+      z-index: 90;
+    }
+    .study-tab-btn {
+      flex: 1; padding: 10px 6px;
+      border: none; background: none;
+      color: var(--text-muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px; font-weight: 600;
+      border-radius: 10px; cursor: pointer;
+      transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center;
+      gap: 5px; white-space: nowrap;
+    }
+    .study-tab-btn.active {
+      background: var(--accent);
+      color: #0d0f14;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    [data-theme="arctic"] .study-tab-btn.active { color: #fff; }
+    .study-tab-btn .tab-emoji { font-size: 15px; }
+
+    /* Tab Content */
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* Progress Banner */
+    .progress-banner {
+      background: linear-gradient(135deg, #1a1228, #1e1830);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 16px; padding: 18px 20px; margin-bottom: 20px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    [data-theme="ocean"] .progress-banner { background: linear-gradient(135deg,#0a1628,#0f2040); border-color: rgba(74,158,255,0.2); }
+    [data-theme="forest"] .progress-banner { background: linear-gradient(135deg,#0d1a10,#142018); border-color: rgba(76,175,130,0.2); }
+    [data-theme="sunset"] .progress-banner { background: linear-gradient(135deg,#221008,#301810); border-color: rgba(240,112,64,0.2); }
+    [data-theme="royal"] .progress-banner { background: linear-gradient(135deg,#160e22,#1e1432); border-color: rgba(160,100,255,0.2); }
+    [data-theme="arctic"] .progress-banner { background: linear-gradient(135deg,#e8eef4,#f0f4f8); border-color: rgba(37,102,216,0.2); }
+
+    .progress-icon {
+      width: 48px; height: 48px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+    }
+    .progress-info h3 { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+    .progress-info p { font-size: 13px; color: var(--text-muted); }
+    .progress-bar-wrap {
+      background: var(--surface2); border-radius: 50px;
+      height: 6px; margin-top: 8px; overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 50px; transition: width 0.6s ease;
+    }
+
+    /* Chapter Grid */
+    .section-label {
+      font-size: 11px; font-weight: 700; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;
+    }
+    .chapter-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 8px; margin-bottom: 20px;
+    }
+    .ch-btn {
+      aspect-ratio: 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text-muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .ch-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .ch-btn.selected { background: var(--accent); color: #0d0f14; border-color: var(--accent); }
+    [data-theme="arctic"] .ch-btn.selected { color: #fff; }
+    .ch-btn.completed::after {
+      content: '✓'; position: absolute; top: 2px; right: 4px;
+      font-size: 10px; color: var(--success);
+    }
+    .ch-btn.completed { border-color: rgba(76,175,130,0.3); }
+
+    .action-row { display: flex; gap: 10px; margin-bottom: 20px; }
+    .btn-secondary {
+      flex: 1; padding: 13px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; color: var(--text);
+      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-load {
+      flex: 2; padding: 13px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none; border-radius: 12px; color: #0d0f14;
+      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: opacity 0.2s, transform 0.15s;
+    }
+    [data-theme="arctic"] .btn-load { color: #fff; }
+    .btn-load:active { opacity: 0.85; transform: scale(0.98); }
+    .btn-load:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* Loading */
+    #loadingState { display: none; text-align: center; padding: 40px 20px; }
+    .spinner {
+      width: 36px; height: 36px;
+      border: 3px solid var(--surface2);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 14px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #loadingState p { color: var(--text-muted); font-size: 14px; }
+
+    /* Scripture Card */
+    .scripture-card {
+      display: none;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden; margin-bottom: 16px;
+    }
+    .scripture-header {
+      background: var(--surface2); padding: 14px 18px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+    .scripture-header h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px; color: var(--accent2);
+    }
+    .scripture-header span { font-size: 12px; color: var(--text-muted); }
+    .scripture-body {
+      padding: 18px; font-size: 15px; line-height: 1.8;
+      color: var(--text); max-height: 380px; overflow-y: auto;
+    }
+    .scripture-body::-webkit-scrollbar { width: 4px; }
+    .scripture-body::-webkit-scrollbar-track { background: transparent; }
+    .scripture-body::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 2px; }
+
+    /* Quiz Card */
+    .quiz-card {
+      display: none;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden; margin-bottom: 16px;
+    }
+    .quiz-empty {
+      text-align: center; padding: 40px 20px;
+      color: var(--text-muted); font-size: 14px;
+    }
+    .quiz-empty .quiz-empty-icon { font-size: 40px; margin-bottom: 12px; }
+    .quiz-header {
+      background: linear-gradient(135deg, #1a1228, #1e1830);
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+      padding: 14px 18px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    [data-theme="ocean"] .quiz-header { background: linear-gradient(135deg,#0a1628,#0f2040); }
+    [data-theme="forest"] .quiz-header { background: linear-gradient(135deg,#0d1a10,#142018); }
+    [data-theme="sunset"] .quiz-header { background: linear-gradient(135deg,#221008,#301810); }
+    [data-theme="royal"] .quiz-header { background: linear-gradient(135deg,#160e22,#1e1432); }
+    [data-theme="arctic"] .quiz-header { background: linear-gradient(135deg,#e8eef4,#f0f4f8); }
+    .quiz-header .quiz-icon {
+      width: 32px; height: 32px;
+      background: rgba(201,168,76,0.15);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+    .quiz-header h3 { font-size: 15px; font-weight: 600; }
+    .quiz-body { padding: 18px; }
+    .quiz-question-text {
+      font-size: 15px; font-weight: 500;
+      line-height: 1.6; margin-bottom: 18px; color: var(--text);
+    }
+    .options-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .option-label {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 13px 14px;
+      background: var(--surface2); border: 1.5px solid var(--border);
+      border-radius: 12px; cursor: pointer; transition: all 0.2s;
+    }
+    .option-label:hover { border-color: var(--accent); }
+    .option-item input[type=radio] { display: none; }
+    .option-item input[type=radio]:checked + .option-label {
+      border-color: var(--accent); background: rgba(201,168,76,0.08);
+    }
+    .option-badge {
+      min-width: 26px; height: 26px; border-radius: 7px;
+      background: var(--surface); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; color: var(--text-muted);
+      flex-shrink: 0; transition: all 0.2s;
+    }
+    .option-item input[type=radio]:checked + .option-label .option-badge {
+      background: var(--accent); color: #0d0f14; border-color: var(--accent);
+    }
+    [data-theme="arctic"] .option-item input[type=radio]:checked + .option-label .option-badge { color: #fff; }
+    .option-text { font-size: 14px; line-height: 1.5; padding-top: 2px; }
+    .quiz-body .btn-primary { margin-top: 18px; }
+    .quiz-feedback {
+      display: none; margin-top: 14px; padding: 14px 16px;
+      border-radius: 12px; font-size: 14px; font-weight: 500; line-height: 1.5;
+    }
+    .quiz-feedback.correct { background: rgba(76,175,130,0.12); border: 1px solid rgba(76,175,130,0.25); color: var(--success); }
+    .quiz-feedback.incorrect { background: rgba(224,92,92,0.12); border: 1px solid rgba(224,92,92,0.25); color: var(--danger); }
+
+    #markCompBtn {
+      width: 100%; display: none;
+      padding: 15px; margin-bottom: 10px;
+      background: rgba(76,175,130,0.1);
+      border: 1.5px solid rgba(76,175,130,0.3);
+      border-radius: 14px; color: var(--success);
+      font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700;
+      cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    #markCompBtn:hover { background: rgba(76,175,130,0.18); }
+
+    /* ===== AI TAB ===== */
+    .ai-panel {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden;
+    }
+    .ai-panel-header {
+      background: linear-gradient(135deg, #1a1228, #1e1830);
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+      padding: 16px 18px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    [data-theme="ocean"] .ai-panel-header { background: linear-gradient(135deg,#0a1628,#0f2040); }
+    [data-theme="forest"] .ai-panel-header { background: linear-gradient(135deg,#0d1a10,#142018); }
+    [data-theme="sunset"] .ai-panel-header { background: linear-gradient(135deg,#221008,#301810); }
+    [data-theme="royal"] .ai-panel-header { background: linear-gradient(135deg,#160e22,#1e1432); }
+    [data-theme="arctic"] .ai-panel-header { background: linear-gradient(135deg,#e8eef4,#f0f4f8); }
+    .ai-panel-icon {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; flex-shrink: 0;
+    }
+    .ai-panel-info h3 { font-size: 15px; font-weight: 600; }
+    .ai-panel-info p { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    .ai-messages {
+      padding: 16px; display: flex; flex-direction: column; gap: 12px;
+      min-height: 200px; max-height: 340px; overflow-y: auto;
+    }
+    .ai-messages::-webkit-scrollbar { width: 4px; }
+    .ai-messages::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 2px; }
+    .ai-bubble {
+      max-width: 86%; padding: 12px 14px;
+      border-radius: 14px; font-size: 14px; line-height: 1.6;
+    }
+    .ai-bubble.user {
+      align-self: flex-end;
+      background: var(--accent); color: #0d0f14; font-weight: 500;
+      border-bottom-right-radius: 4px;
+    }
+    [data-theme="arctic"] .ai-bubble.user { color: #fff; }
+    .ai-bubble.bot {
+      align-self: flex-start;
+      background: var(--surface2); color: var(--text);
+      border: 1px solid var(--border);
+      border-bottom-left-radius: 4px;
+    }
+    .ai-bubble.loading {
+      align-self: flex-start;
+      background: var(--surface2); border: 1px solid var(--border);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .ai-dots span {
+      display: inline-block; width: 6px; height: 6px;
+      background: var(--text-muted); border-radius: 50%;
+      animation: dotBounce 1.4s ease infinite;
+    }
+    .ai-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .ai-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes dotBounce {
+      0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+    .ai-empty {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; padding: 40px 20px; color: var(--text-muted);
+      font-size: 14px; gap: 10px; text-align: center;
+    }
+    .ai-empty-icon { font-size: 40px; }
+    .ai-input-row {
+      display: flex; gap: 10px; padding: 14px 16px;
+      border-top: 1px solid var(--border);
+    }
+    .ai-input-row input {
+      flex: 1; background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 13px 14px; color: var(--text);
+      font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none;
+      transition: border-color 0.2s;
+    }
+    .ai-input-row input:focus { border-color: var(--accent); }
+    .ai-input-row input::placeholder { color: var(--text-muted); }
+    .ai-input-row button {
+      padding: 13px 18px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none; border-radius: 12px; color: #0d0f14;
+      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+    [data-theme="arctic"] .ai-input-row button { color: #fff; }
+    .ai-input-row button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ===== CHAT TAB ===== */
+    .chat-panel {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden;
+    }
+    .chat-header {
+      background: linear-gradient(135deg, #1a1228, #1e1830);
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+      padding: 14px 18px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    [data-theme="ocean"] .chat-header { background: linear-gradient(135deg,#0a1628,#0f2040); }
+    [data-theme="forest"] .chat-header { background: linear-gradient(135deg,#0d1a10,#142018); }
+    [data-theme="sunset"] .chat-header { background: linear-gradient(135deg,#221008,#301810); }
+    [data-theme="royal"] .chat-header { background: linear-gradient(135deg,#160e22,#1e1432); }
+    [data-theme="arctic"] .chat-header { background: linear-gradient(135deg,#e8eef4,#f0f4f8); }
+    .chat-header-icon {
+      width: 32px; height: 32px;
+      background: rgba(201,168,76,0.15);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+    .chat-header h3 { font-size: 15px; font-weight: 600; }
+    .chat-header-meta { font-size: 12px; color: var(--text-muted); margin-left: auto; }
+    .chat-messages {
+      padding: 16px; display: flex; flex-direction: column; gap: 14px;
+      min-height: 280px; max-height: 400px; overflow-y: auto;
+    }
+    .chat-messages::-webkit-scrollbar { width: 4px; }
+    .chat-messages::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 2px; }
+    .chat-msg { display: flex; gap: 10px; align-items: flex-start; }
+    .chat-msg.mine { flex-direction: row-reverse; }
+    .chat-avatar {
+      width: 30px; height: 30px; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; color: #0d0f14;
+    }
+    [data-theme="arctic"] .chat-avatar { color: #fff; }
+    .chat-avatar.admin-avatar { background: linear-gradient(135deg,#e05c5c,#f07040); }
+    .chat-bubble-wrap { display: flex; flex-direction: column; max-width: 78%; gap: 3px; }
+    .chat-msg.mine .chat-bubble-wrap { align-items: flex-end; }
+    .chat-username {
+      font-size: 11px; font-weight: 700; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.5px; padding: 0 4px;
+    }
+    .chat-username.admin-name { color: #e05c5c; }
+    .chat-bubble {
+      padding: 10px 14px; border-radius: 14px;
+      font-size: 14px; line-height: 1.5; color: var(--text);
+      background: var(--surface2); border: 1px solid var(--border);
+      word-break: break-word;
+    }
+    .chat-msg.mine .chat-bubble {
+      background: var(--accent); color: #0d0f14;
+      border-color: var(--accent);
+    }
+    [data-theme="arctic"] .chat-msg.mine .chat-bubble { color: #fff; }
+    .chat-time { font-size: 10px; color: var(--text-muted); padding: 0 4px; }
+    .chat-empty {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; padding: 40px 20px; color: var(--text-muted);
+      font-size: 14px; gap: 10px; text-align: center;
+    }
+    .chat-empty-icon { font-size: 40px; }
+    .chat-input-row {
+      display: flex; gap: 10px; padding: 14px 16px;
+      border-top: 1px solid var(--border);
+    }
+    .chat-input-row input {
+      flex: 1; background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 13px 14px; color: var(--text);
+      font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none;
+      transition: border-color 0.2s;
+    }
+    .chat-input-row input:focus { border-color: var(--accent); }
+    .chat-input-row input::placeholder { color: var(--text-muted); }
+    .chat-input-row button {
+      padding: 13px 18px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none; border-radius: 12px; color: #0d0f14;
+      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: opacity 0.2s; white-space: nowrap;
+    }
+    [data-theme="arctic"] .chat-input-row button { color: #fff; }
+    .chat-input-row button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ===== THEME MODAL ===== */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.7); z-index: 500;
+      align-items: flex-end; justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-sheet {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 24px 24px 0 0; padding: 28px 20px 40px;
+      width: 100%; max-width: 640px;
+      animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .modal-handle {
+      width: 40px; height: 4px;
+      background: var(--border); border-radius: 2px;
+      margin: 0 auto 22px;
+    }
+    .modal-sheet h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px; margin-bottom: 6px;
+    }
+    .modal-sheet > p { font-size: 13px; color: var(--text-muted); margin-bottom: 22px; }
+
+    .theme-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 10px; margin-bottom: 20px;
+    }
+    .theme-option {
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      padding: 14px 8px; border-radius: 14px;
+      border: 2px solid var(--border);
+      cursor: pointer; transition: all 0.2s;
+      background: var(--surface2);
+    }
+    .theme-option:hover { border-color: var(--accent); }
+    .theme-option.selected { border-color: var(--accent); }
+    .theme-swatch {
+      width: 44px; height: 44px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; position: relative;
+    }
+    .theme-swatch::after {
+      content: ''; position: absolute; inset: 0;
+      border-radius: 12px; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1);
+    }
+    .theme-name { font-size: 12px; font-weight: 700; color: var(--text); }
+    .theme-option.selected .theme-name { color: var(--accent); }
+
+    .btn-close-modal {
+      width: 100%; padding: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #0d0f14; border: none; border-radius: 12px;
+      font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700;
+      cursor: pointer; transition: opacity 0.2s;
+    }
+    [data-theme="arctic"] .btn-close-modal { color: #fff; }
+    .btn-close-modal:hover { opacity: 0.9; }
+
+    /* ===== TOAST ===== */
+    .toast {
+      position: fixed; top: 80px; left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 50px; padding: 10px 20px;
+      font-size: 13px; font-weight: 600;
+      z-index: 999; opacity: 0;
+      transition: all 0.3s; white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.success { border-color: rgba(76,175,130,0.4); color: var(--success); }
+    .toast.error { border-color: rgba(224,92,92,0.4); color: var(--danger); }
+  </style>
+</head>
+<body>
+
+  <!-- Rainbow Banner -->
+  <div class="rainbow-banner">
+    <span class="banner-spin">✦</span>
+    <span class="banner-text-inner">Developed by <strong>Ebunoluwa</strong> · Powered by <strong>GiftAxis Academy</strong> · Mark Bible Tutor</span>
+    <span class="banner-spin">✦</span>
+  </div>
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="app-logo">
+        <div class="icon">📖</div>
+        <h1>Mark Bible Tutor<span>GiftAxis Academy</span></h1>
+      </div>
+      <div class="header-right">
+        <button id="themeToggleBtn" title="Change theme">🎨</button>
+        <div id="userBadge" class="user-badge">
+          <div class="avatar" id="avatarLetter">G</div>
+          <div>
+            <div class="name" id="currentUserEl">—</div>
+            <div class="pts"><span id="scoreEl">0</span> pts</div>
+          </div>
+          <button id="logoutBtn" title="Sign out">⏻</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="page">
+
+    <!-- Auth Panel -->
+    <div id="authPanel">
+      <div class="auth-card">
+        <h2>Welcome Back 👋</h2>
+        <p>Sign in or create an account to begin studying the Gospel of Mark.</p>
+        <div class="tab-row">
+          <button class="tab-btn active" id="loginTabBtn" onclick="setAuthTab('login')">Sign In</button>
+          <button class="tab-btn" id="registerTabBtn" onclick="setAuthTab('register')">Register</button>
+        </div>
+        <div class="form-group">
+          <label>Username</label>
+          <input id="usernameInput" type="text" placeholder="Enter your username" autocomplete="username" />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input id="passwordInput" type="password" placeholder="Enter your password" autocomplete="current-password" />
+        </div>
+        <button class="btn-primary" id="authSubmitBtn" onclick="handleAuth()">Sign In</button>
+        <div id="authMsg" class="auth-msg"></div>
+      </div>
+    </div>
+
+    <!-- Study Panel -->
+    <div id="studyPanel">
+
+      <!-- Tab Navigation -->
+      <div class="study-tab-nav">
+        <button class="study-tab-btn active" data-tab="bible">
+          <span class="tab-emoji">📖</span> Bible
+        </button>
+        <button class="study-tab-btn" data-tab="quiz">
+          <span class="tab-emoji">🎯</span> Quiz
+        </button>
+        <button class="study-tab-btn" data-tab="ai">
+          <span class="tab-emoji">🤖</span> AI
+        </button>
+        <button class="study-tab-btn" data-tab="chat">
+          <span class="tab-emoji">💬</span> Chat
+        </button>
+      </div>
+
+      <!-- Bible Tab -->
+      <div id="tab-bible" class="tab-content active">
+        <div class="progress-banner">
+          <div class="progress-icon">📚</div>
+          <div class="progress-info" style="flex:1">
+            <h3>Your Study Progress</h3>
+            <p id="progressText">0 of 16 chapters completed</p>
+            <div class="progress-bar-wrap">
+              <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+            </div>
+          </div>
+        </div>
+
+        <p class="section-label">Select a Chapter</p>
+        <div class="chapter-grid" id="chapterGrid"></div>
+
+        <div class="action-row">
+          <button class="btn-secondary" onclick="markCompleted()">✓ Mark Done</button>
+          <button class="btn-load" id="loadBtn" onclick="loadChapter()">Load Chapter →</button>
+        </div>
+
+        <div id="loadingState">
+          <div class="spinner"></div>
+          <p>Retrieving scripture and generating quiz…</p>
+        </div>
+
+        <div class="scripture-card" id="scriptureCard">
+          <div class="scripture-header">
+            <h3 id="scriptureTitle">Mark — Chapter</h3>
+            <span>King James Version</span>
+          </div>
+          <div class="scripture-body" id="scriptureBody"></div>
+        </div>
+      </div>
+
+      <!-- Quiz Tab -->
+      <div id="tab-quiz" class="tab-content">
+        <div class="quiz-card" id="quizCard" style="display:block">
+          <div class="quiz-empty">
+            <div class="quiz-empty-icon">🎯</div>
+            <p>Load a Bible chapter from the <strong>Bible tab</strong> to generate a comprehension quiz.</p>
+          </div>
+        </div>
+        <button id="markCompBtn" onclick="markCompleted()">✅ Mark Chapter as Completed</button>
+      </div>
+
+      <!-- AI Tab -->
+      <div id="tab-ai" class="tab-content">
+        <div class="ai-panel">
+          <div class="ai-panel-header">
+            <div class="ai-panel-icon">🤖</div>
+            <div class="ai-panel-info">
+              <h3>AI Scripture Tutor</h3>
+              <p>Ask anything about the Gospel of Mark</p>
+            </div>
+          </div>
+          <div class="ai-messages" id="aiMessages">
+            <div class="ai-empty">
+              <span class="ai-empty-icon">💬</span>
+              <p>Ask the AI tutor any question about the Gospel of Mark and get an informed response.</p>
+            </div>
+          </div>
+          <div class="ai-input-row">
+            <input id="aiInput" type="text" placeholder="e.g. Who healed the blind man?" />
+            <button id="aiSendBtn" onclick="askAI()">Ask</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Tab -->
+      <div id="tab-chat" class="tab-content">
+        <div class="chat-panel">
+          <div class="chat-header">
+            <div class="chat-header-icon">💬</div>
+            <h3>Group Study Chat</h3>
+            <span class="chat-header-meta" id="chatOnlineCount">Open to all</span>
+          </div>
+          <div class="chat-messages" id="chatMessages">
+            <div class="chat-empty">
+              <span class="chat-empty-icon">💬</span>
+              <p>No messages yet. Be the first to say something!</p>
+            </div>
+          </div>
+          <div class="chat-input-row">
+            <input id="chatInput" type="text" placeholder="Type a message…" maxlength="500" />
+            <button id="chatSendBtn" onclick="sendChatMessage()">Send</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Theme Modal -->
+  <div class="modal-overlay" id="themeModal">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <h3>Choose Your Theme 🎨</h3>
+      <p>Personalise your Bible study experience. Your theme is saved automatically.</p>
+      <div class="theme-grid">
+        <div class="theme-option selected" data-theme="gold" onclick="applyTheme('gold')">
+          <div class="theme-swatch" style="background:linear-gradient(135deg,#1a1228,#c9a84c)">🌙</div>
+          <span class="theme-name">Dark Gold</span>
+        </div>
+        <div class="theme-option" data-theme="ocean" onclick="applyTheme('ocean')">
+          <div class="theme-swatch" style="background:linear-gradient(135deg,#050d1a,#4a9eff)">🌊</div>
+          <span class="theme-name">Ocean</span>
+        </div>
+        <div class="theme-option" data-theme="forest" onclick="applyTheme('forest')">
+          <div class="theme-swatch" style="background:linear-gradient(135deg,#060e08,#4caf82)">🌿</div>
+          <span class="theme-name">Forest</span>
+        </div>
+        <div class="theme-option" data-theme="sunset" onclick="applyTheme('sunset')">
+          <div class="theme-swatch" style="background:linear-gradient(135deg,#140a05,#f07040)">🌅</div>
+          <span class="theme-name">Sunset</span>
+        </div>
+        <div class="theme-option" data-theme="royal" onclick="applyTheme('royal')">
+          <div class="theme-swatch" style="background:linear-gradient(135deg,#0c0814,#a064ff)">💜</div>
+          <span class="theme-name">Royal</span>
+        </div>
+        <div class="theme-option" data-theme="arctic" onclick="applyTheme('arctic')">
+          <div class="theme-swatch" style="background:linear-gradient(135deg,#e8eef4,#2566d8)">❄️</div>
+          <span class="theme-name">Arctic</span>
+        </div>
+      </div>
+      <button class="btn-close-modal" onclick="closeThemeModal()">Continue Studying →</button>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
