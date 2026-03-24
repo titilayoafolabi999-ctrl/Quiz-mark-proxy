@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Mark Bible Tutor Mobile</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<h1>📖 Mark Bible Tutor</h1>
+
+<div id="auth" class="auth-container">
+  <input id="username" placeholder="Username" />
+  <input id="password" type="password" placeholder="Password" />
+  <button onclick="register()">Register</button>
+  <button onclick="login()">Login</button>
+</div>
+
+<div id="userInfo" class="user-info" style="display:none;">
+  Logged in as <span id="currentUser"></span> | Score: <span id="score">0</span>
+  <button onclick="logout()">Logout</button>
+</div>
+
+<div class="chapter-container">
+  <select id="chapter"></select>
+  <button onclick="loadChapter()">Load Chapter</button>
+  <button onclick="markCompleted()" style="background:#28a745;">✓ Mark Completed</button>
+</div>
+
+<div id="loading" style="display:none;">Loading...</div>
+
+<div id="text" class="text-container"></div>
+<div id="quiz" class="quiz-container"></div>
+
+<div id="aiBtn">🤖</div>
+
+<footer class="app-footer">
+  Built by Ebunoluwa with the help of Giftaxis Labs
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
