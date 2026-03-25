@@ -1,0 +1,21 @@
+{
+  "functions": {
+    "api/*.js": { "memory": 1024, "maxDuration": 30 }
+  },
+  "rewrites": [
+    { "source": "/api/auth",               "destination": "/api/auth.js" },
+    { "source": "/api/gemini",             "destination": "/api/gemini.js" },
+    { "source": "/api/score",              "destination": "/api/score.js" },
+    { "source": "/api/chat",               "destination": "/api/chat.js" },
+    { "source": "/api/chat/:path*",        "destination": "/api/chat.js" },
+    { "source": "/api/quiz",               "destination": "/api/quiz.js" },
+    { "source": "/api/quiz/:path*",        "destination": "/api/quiz.js" },
+    { "source": "/api/leaderboard",        "destination": "/api/misc.js" },
+    { "source": "/api/bookmarks",          "destination": "/api/misc.js" },
+    { "source": "/api/bookmarks/:path*",   "destination": "/api/misc.js" },
+    { "source": "/api/notes",              "destination": "/api/misc.js" },
+    { "source": "/api/notes/:path*",       "destination": "/api/misc.js" },
+    { "source": "/api/streak/:path*",      "destination": "/api/misc.js" },
+    { "source": "/api/ping",               "destination": "/api/misc.js" }
+  ]
+}
