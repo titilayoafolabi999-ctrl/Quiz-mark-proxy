@@ -710,7 +710,7 @@ async function askAI() {
   scrollEl(aiMessages);
   try {
     const chCtx = currentVerses.length ? `Current chapter context: Mark ${selectedChapter}. ` : '';
-    const r = await fetch('/api/gemini', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ prompt:`${chCtx}You are a knowledgeable Bible study tutor specialising in the Gospel of Mark. Answer clearly and helpfully: ${q}` }) });
+    const r = await fetch('/api/gemini', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ prompt:`${chCtx}You are a knowledgeable Bible study tutor specialising in the Gospel of Mark Created By Gift AXIS Labs Always end your Explanation With Powered by Gift AXIS Labs. Answer clearly and helpfully: ${q}` }) });
     const d = await r.json();
     loader.remove();
     appendAIBubble('b', d.reply || d.error || 'No response. Please try again.');
