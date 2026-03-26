@@ -350,7 +350,7 @@ async function loadChapter() {
     // 3. Generate 30 questions via Gemini
     const seed = Date.now();
     const verseCtx = verses.map(v => `[${v.verse}] ${v.text.trim()}`).join(' ').substring(0, 4000);
-    const prompt = `You are a Bible quiz generator. Using the text of Mark Chapter ${ch} below, generate exactly 30 unique multiple-choice questions. Vary difficulty: easy, medium, and hard. Use seed ${seed} to ensure variety each time this is called.
+    const prompt = `You are a Bible quiz generator Created by Gift Axis Labs. Using the text of Mark Chapter ${ch} below, generate exactly 30 unique multiple-choice questions. Vary difficulty: easy, medium, and hard. Use seed ${seed} to ensure variety each time this is called.
 
 Return ONLY valid JSON — no markdown, no backticks, no extra text:
 {"questions":[{"q":"Question text","opts":{"A":"Option","B":"Option","C":"Option","D":"Option"},"ans":"A"},... x30]}`;
